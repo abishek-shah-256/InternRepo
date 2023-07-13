@@ -36,10 +36,10 @@
           <a href="/messenger" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mt-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/chat.svg' %}" alt="">
             <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Messages</p>
           </a>
-          <a href="{% url 'profiles:profile-list-view' %}" class="group relative bg-[#a7e0bc] hover:bg-[#63cc89] p-3 mt-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/friends.svg' %}" alt="">
+          <a href="{% url 'profiles:profile-list-view' %}" class="group relative  bg-gray-400 hover:bg-[#63cc89] p-3 mt-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/friends.svg' %}" alt="">
             <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Find Freinds</p>
           </a>
-          <a href="{% url 'profiles:my-invites-view' %}" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mb-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/add-friend.png' %}" alt="">
+          <a href="{% url 'profiles:my-invites-view' %}" class="group relative bg-[#a7e0bc] hover:bg-[#63cc89] p-3 mb-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/add-friend.png' %}" alt="">
             <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Friend Request</p>
           </a>
 
@@ -91,7 +91,7 @@
 
      
             <!-- ----------profile Dataa------ -->
-            <div class=" w-[1020px] mx-auto my-7 mt-[100px] bg-white shadow-lg shadow-gray-400 rounded-2xl p-4">
+            <div class=" w-[1020px] mx-auto my-7 mt-[100px] shadow-lg shadow-gray-400 rounded-2xl p-4">
                
                 <div>
                     <div class="w-full h-[250px]">
@@ -107,9 +107,9 @@
                 {% endif %}
  
                 <!-- ----------Friends list------------- -->
-                <div class="bg-white rounded-lg shadow-xl p-8">
+                <div class=" rounded-lg shadow-xl p-8 bg-gray-200">
                     <div class="flex items-center justify-between">
-                        <h4 class="text-xl text-gray-900 font-bold">Find New Friends</h4>
+                        <h4 class="text-xl text-gray-900 font-bold">Friend requests</h4>
                         <a href="#" title="View All">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500 hover:text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
@@ -117,21 +117,40 @@
                         </a>
                     </div>
                     
-                    <div class="flex flex-row flex-wrap gap-20 mt-8">
-
-                            {% for profile in profiles %}
-                                <a href="{% url 'profiles:profile-detail-view' profile.pk %}" class="no-underline flex flex-col items-center justify-between text-gray-800 hover:text-[#1ab41a90]" title="View Profile">
-                                    <img src="{{profile.avatar.url}}" class="w-[100px] h-[100px] rounded-lg shadow-2xl shadow-black bg-green-200">
-                                    <p class="text-center font-bold text-sm mt-1">{{profile.first_name}} {{profile.last_name}}</p>
-                                    <button type="button" class="btn btn-primary" style="background-color: #369273;">View profile</button>
-                                </a>
-                            {% endfor %}                         
-
+                    <div class="gap-10 mt-8 flex flex-col"> 
+                       
+                        {%if request_exist%}
+                            {%for item in qs%}
+                    
+                                <div class="flex flex-row gap-10 border-b-4 border-green-100 ">
+                                        <a href="{% url 'profiles:profile-detail-view' item.sender.user.profile.pk %}" class="no-underline text-gray-800 hover:text-[#1ab41a90]" title="View Profile">
+                                            <div class="w-[100px]">
+                                                <img src="{{item.sender.user.profile.avatar.url}}" class="w-[100px] h-[100px] rounded-lg shadow-2xl shadow-black bg-green-200 ">
+                                                <p class="text-center font-bold text-sm mt-3">{{item.sender.user.profile.first_name}} {{item.sender.user.profile.last_name}}</p>
+                                            </div>
+                                            <button type="button" class="w-[100px] -mt-3 p-2 rounded-lg bg-[#369273] hover:bg-[#6cdfb8] text-white">View profile</button>
+                                        </a>
+                                        <div class="flex flex-col justify-around mt-5">
+                                            <form action="{% url 'profiles:accept-request' item.id %}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class=" text-center w-[100px]  p-2 rounded-lg bg-[#354db8] hover:bg-[#677feb] text-white">Accept</button>
+                                            </form>
+                                            <form action="{% url 'profiles:reject-request' item.id %}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="w-[100px]  p-2 rounded-lg  bg-[#e72626] hover:bg-[#ef8f8f] text-white">Reject</button>
+                                            </form>
+                                        </div>
+                                </div> 
+                            {%endfor%} 
+                        {%else%}
+                            <h3>so sad...No friend Request</h3>
+                        {%endif%}
+                           
                     </div>
 
                 </div>
-
             </div>
+                                  
       
 
             <!-- ------Active status------- -->

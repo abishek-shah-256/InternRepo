@@ -28,7 +28,6 @@ class Profile(models.Model):
     def profiles_posts(self):
         return self.post_set.all()
     
-
     # def friends_posts(self):
     #     friends = self.friends.all()
     #     friends_post = 'app1.Post'.objects.filter(user=friends)
@@ -36,10 +35,13 @@ class Profile(models.Model):
     
 
     def get_friends(self): 
-        return self.friends.all()
+        # return self.friends.all()
+        return self.friends.exclude(profile = self.user.profile)
+
     
     def get_friends_no(self):
-        return self.friends.all().count()
+        # return self.friends.all().count()
+        return self.friends.exclude(profile = self.user.profile).count()
     
     def save(self, *args, **kwargs):
         ex = False
@@ -57,20 +59,31 @@ class Profile(models.Model):
         super().save(*args, **kwargs)
 
 
+class RelationshipManager(models.Manager):
+    def invitations_received(self, receiver):
+        qs = Relationship.objects.filter(receiver=receiver, status="send")
+        return qs
+    
 
 class Relationship(models.Model):
     STATUS_CHOICES = (
         ('send', 'send'),
-        ('accepted', 'accepted'))
+        ('accepted', 'accepted'),
+        ('waiting','waiting'),
+        ('rejected','rejected'),
+        )
     sender = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='sender')
     receiver = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='receiver')
     status = models.CharField(max_length=15, choices=STATUS_CHOICES)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
+    objects = RelationshipManager()
+
     def __str__(self):
         return f"sender = {self.sender}-\n nreceiver = {self.receiver}\n{self.status}"
     
+
 
 
 

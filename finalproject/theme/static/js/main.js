@@ -303,7 +303,26 @@ $(document).ready(function(){
 
 
 
+// -----------------for add-friend-btn-ajax--------------
 
+// $(document).ready(function(){
+//   $('.add_friend_btn').submit(function(e){
+//     e.preventDefault();
+    
+//     url: 
+//     url: 'handlecomment',
+//     type:'POST',
+//     data: formData,
+//     processData: false,
+//     contentType:false,
+//     header:{
+//       'x-CSRFToken': csrftoken_var
+//   },
+
+
+//   })
+
+// })
 
 
 

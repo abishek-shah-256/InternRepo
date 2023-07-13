@@ -121,7 +121,7 @@ def signin(request):
 
     return render(request, 'app1/signIn.html')
     
-def logout(request):
+def logoutt(request):
     logout(request)
     return redirect('signin')
 
