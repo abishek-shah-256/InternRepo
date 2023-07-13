@@ -35,11 +35,11 @@
           <a href="/messenger" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3  rounded-lg"><img class="h-10 w-10" src="{%static 'img/chat.svg' %}" alt="">
             <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Messages</p>
           </a>
-          <a href="{% url 'profiles:profile-list-view' %}" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3  rounded-lg"><img class="h-10 w-10" src="{%static 'img/friends.svg' %}" alt="">
+          <a href="{% url 'profiles:profile-list-view' %}" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mt-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/friends.svg' %}" alt="">
             <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Find Freinds</p>
           </a>
-          <a href="#" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mb-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/settings.svg' %}" alt="">
-            <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Settings</p>
+          <a href="{% url 'profiles:my-invites-view' %}" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mb-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/add-friend.png' %}" alt="">
+            <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Friend Request</p>
           </a>
 
       </div>  
@@ -80,7 +80,7 @@
                         <span class=" bg-[#e2e6ea] flex justify-center items-center bottom-[-5px] right-[-2px] absolute material-icons-sharp w-3.5 h-3.5 border-red-900 dark:border-gray-800 rounded-full">expand_more</span>
                         <ul class="expand-more-items">
                             <li><a href="#">settings</a></li>
-                            <li><a href="accounts/logout/">logout</a></li>
+                            <li><a href="{%url 'logout' %}">logout</a></li>
                         </ul>
                     </div>
                   </div>

@@ -39,8 +39,8 @@
           <a href="{% url 'profiles:profile-list-view' %}" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mt-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/friends.svg' %}" alt="">
             <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Find Freinds</p>
           </a>
-          <a href="#" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mb-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/settings.svg' %}" alt="">
-            <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Settings</p>
+          <a href="{% url 'profiles:my-invites-view' %}" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mb-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/add-friend.png' %}" alt="">
+            <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Friend Request</p>
           </a>
 
       </div>  
@@ -82,7 +82,7 @@
                         <span class=" bg-[#e2e6ea] flex justify-center items-center bottom-[-5px] right-[-2px] absolute material-icons-sharp w-3.5 h-3.5 border-red-900 dark:border-gray-800 rounded-full">expand_more</span>
                         <ul class="expand-more-items">
                             <li><a href="#">settings</a></li>
-                            <li><a href="accounts/logout/">logout</a></li>
+                            <li><a href="{%url 'logout' %}">logout</a></li>
                         </ul>
                     </div>
                   </div>
@@ -108,7 +108,10 @@
                     </div>
                     <div class="flex-1 flex flex-col items-center lg:items-end justify-end px-8 mt-2">
                         <div class="flex items-center space-x-4 mt-2">
-                            {%if friends %}
+
+
+                        {% comment %} --------------OLD Logic for add friend----------------------- {% endcomment %}
+                            {% comment %} {%if friends %}
                                 <form action="{% url 'profiles:friend-unfriend-profile' %}" method="POST">
                                     {%csrf_token%}
                                     <input type="hidden" name="profile_pk" value={{object.pk}} />
@@ -130,7 +133,67 @@
                                             <span class="">Add Friend</span>
                                     </button>
                                 </form>
-                            {%endif%}
+                            {%endif%} {% endcomment %}
+                        {% comment %} ---------------End of old logic--------------------- {% endcomment %}
+
+                        
+                        {% comment %} ------New logic------------ {% endcomment %}
+                        {% comment %} <form action="{% url 'profiles:send-request' %}" method="POST">
+                            {%csrf_token%}
+                            <input type="hidden" name="profile_pk" value="{{object.pk}}" />
+                            <button type="submit" class="flex flex-row items-center justify-center px-3 py-2 bg-[#cfee44] hover:bg-[#88f734] text-gray-100 rounded text-sm space-x-2 transition duration-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path>
+                                </svg>
+                                <span class="">New Add_Friend </span>
+                        </button>
+                        </form> {% endcomment %}
+                        {{pending}}
+                        {% if pending%}
+                            pending request ON
+                        {%endif%} 
+                    
+                        {%if friends %}
+                        <form action="{% url 'profiles:unfriend-profile' %}" method="POST" >
+                            {%csrf_token%}
+                            <input type="hidden" name="profile_pk" value={{object.pk}} />
+                            <button type="submit" class="flex flex-row items-center justify-center px-3 py-2 bg-[#eb3939] hover:bg-[#e98686] text-gray-100 rounded text-sm space-x-2 transition duration-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path>
+                                </svg>
+                                <span class="">Un-Friend</span>
+                            </button>
+                        </form>
+                    {%else%}
+
+                        <form action="{% url 'profiles:send-request' %}" method="POST" class="add_friend_btn">
+                            {%csrf_token%}
+                            <input type="hidden" name="profile_pk" value="{{object.pk}}" />
+                            <button type="submit" class="flex flex-row items-center justify-center px-3 py-2 bg-[#2973b4] hover:bg-[#2099e9] text-gray-100 rounded text-sm space-x-2 transition duration-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path>
+                                </svg>
+                                <span class="">Add_Friend </span>
+                            </button>
+                        </form>
+                    {%endif%}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                             <button class="flex items-center bg-[#369273] hover:bg-[#20e9a6] text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100">
@@ -308,18 +371,9 @@
     <!-- Link to js -->
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
    <script>  
-        $(document).ready(function() {
-            var messages = $('.messages');
-            if(messages.length != 0){ 
-                    console.log("Elements exist");
-                    setTimeout(function(){
-                        messages.hide();
-                    }, 1200);
-                }
-            }
-        ) 
+        console.log("hellooo")
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-    <script src="{%static 'js/main.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
     </body>
 </html>
