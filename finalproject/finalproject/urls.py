@@ -13,6 +13,8 @@ urlpatterns = [
     path('', include('app1.urls')),
     path('profile/', include('profiles.urls', namespace='profiles')),
     
+    path("chat/", include("chat.urls")),
+    
 ]
 
 # FOR IMAGE HANDLING

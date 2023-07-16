@@ -19,5 +19,8 @@ urlpatterns = [
     path('accept_friend_request/<pk>/',views.accept_friend_request, name='accept-request'),
     path('reject_friend_request/<pk>/',views.reject_friend_request, name='reject-request'),
     
+    
+    path('start_chat/',views.start_message, name='start_message'),
+    
 
 ]

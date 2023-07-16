@@ -40,6 +40,9 @@ ACCOUNT_LOGOUT_ON_GET = True
 
 
 INSTALLED_APPS = [
+    "daphne",
+    'channels',
+
     'clearcache',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -61,7 +64,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google', 
 
     'profiles',
-
+    'chat',
+    
 ]
 
 
@@ -194,4 +198,24 @@ AUTHENTICATION_BACKENDS = [
     # 'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend'
 ]
+
+RECAPTCHA_SITE_KEY = "6LdHfyEnAAAAAKzAnIoFrzsQu53yxdyZtFL1ZKJM"
+RECAPTCHA_SECRET_KEY = "6LdHfyEnAAAAAGvr_ezjwT-czkIoGTh1I--wFXEh"
+
+
+ASGI_APPLICATION = "finalproject.asgi.application"
+# //backend memeroy_cache
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': "channels.layers.InMemoryChannelLayer",
+        # For production redis server
+        # 'CONFIG': {
+        #     'hosts': [('127.0.0.1', 6379)],
+        # }
+    }
+}
+
+
+
+
 

@@ -305,24 +305,42 @@ $(document).ready(function(){
 
 // -----------------for add-friend-btn-ajax--------------
 
-// $(document).ready(function(){
-//   $('.add_friend_btn').submit(function(e){
-//     e.preventDefault();
+$(document).ready(function(){
+  $('.add_friend_btn').submit(function(e){
+    e.preventDefault();
     
-//     url: 
-//     url: 'handlecomment',
-//     type:'POST',
-//     data: formData,
-//     processData: false,
-//     contentType:false,
-//     header:{
-//       'x-CSRFToken': csrftoken_var
-//   },
+    var formData = new FormData(this);
+    var csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
+    var form = this;
+
+    $.ajax({
+      url: url,
+      type:'POST',
+      data: formData,
+      processData: false,
+      contentType:false,
+      header:{
+        'x-CSRFToken': csrftoken
+    },
+    success: function(response){
+      form.reset();
+      $('.showing_frnd_btn').hide();
+      $('.showing_reqst_btn').css('display', 'flex');
+      $('.showing_reqst_btn').show();
 
 
-//   })
 
-// })
+
+    },
+    error: function(error) {
+      console.error('Request failed. Error: ' + error);
+    }
+
+    })
+
+  })
+
+})
 
 
 

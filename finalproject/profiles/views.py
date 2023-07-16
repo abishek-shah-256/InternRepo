@@ -1,9 +1,13 @@
 from django.shortcuts import render,redirect, HttpResponse, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.generic import ListView, DetailView
 from profiles.models import Profile, Relationship
+from chat.models import Thread
 
 
+
+@login_required(login_url='signin')
 def myProfile(request):
     obj = Profile.objects.get(user=request.user)
     context = {
@@ -13,6 +17,8 @@ def myProfile(request):
     return render(request,'profiles/profile.html',context)
 
 
+
+@login_required(login_url='signin')
 def editProfile(request,pk):
     obj = Profile.objects.get(id=pk)
     
@@ -80,6 +86,7 @@ class ProfileDetailView(DetailView):
         return context
     
 
+@login_required(login_url='signin')
 def unfriend_profile(request):
     if request.method == "POST":
         my_profile = Profile.objects.get(user=request.user)
@@ -99,6 +106,7 @@ def unfriend_profile(request):
     return redirect('profiles:profile-list-view')
 
 
+@login_required(login_url='signin')
 def invites_received_view(request):
     myprofile = Profile.objects.get(user=request.user)
     qs = Relationship.objects.invitations_received(myprofile)
@@ -112,6 +120,7 @@ def invites_received_view(request):
     return render(request, 'profiles/my_invites.html', context)
 
 
+@login_required(login_url='signin')
 def send_request(request):
     if request.method =='POST':
         receiver_pk = request.POST['profile_pk']
@@ -131,6 +140,7 @@ def send_request(request):
     return redirect('profiles:profile-list-view')
 
 
+@login_required(login_url='signin')
 def accept_friend_request(request,pk):
     # friends_status = Relationship.objects.get_or_create(pk=pk, )
     friend_request = get_object_or_404(Relationship, pk=pk)
@@ -140,6 +150,7 @@ def accept_friend_request(request,pk):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required(login_url='signin')
 def reject_friend_request(request,pk):
     # friends_status = Relationship.objects.get_or_create(pk=pk, )
     friend_request = get_object_or_404(Relationship, pk=pk)
@@ -147,3 +158,19 @@ def reject_friend_request(request,pk):
     friend_request.save()
     # return HttpResponse("reject vayo")
     return redirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required(login_url='signin')
+def start_message(request):
+    if request.method =='POST':
+        send_message_to = request.POST['profile_pk']
+        myself = request.user.profile.pk
+
+        send_to = Profile.objects.get(pk= send_message_to)
+        myself = Profile.objects.get(pk= myself)
+
+
+        notify, created= Thread.objects.get_or_create(second_person=send_to.user, first_person=myself.user )
+        print(notify, created)
+    
+    return redirect('chat:index')
