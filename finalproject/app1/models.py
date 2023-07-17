@@ -22,6 +22,8 @@ class Post(models.Model):
     author = models.ForeignKey('profiles.Profile', on_delete=models.CASCADE)   
     created_at = models.DateTimeField(auto_now_add=True)
     post_img = models.ImageField(upload_to="post_img/", null=True)
+    num_likes = models.IntegerField(default=0)
+
 
     def __str__(self):
         return self.content
@@ -30,9 +32,13 @@ class Post(models.Model):
         ordering = ['-created_at']
 
 
+
 class Likes(models.Model):
-    user_like_id = models.CharField(max_length=80)
-    count = models.IntegerField()
+    post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user_like = models.ForeignKey('profiles.Profile', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.num_likes
 
 
 
@@ -44,4 +50,5 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.comment_content[:20]
+
 

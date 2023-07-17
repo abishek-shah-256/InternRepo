@@ -9,19 +9,18 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="shortcut icon" type="image/x-icon" href="{%static 'img/logo-color.png'%}" >
-
         <link href="https://fonts.gstatic.com" rel="preconnect">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i 500,500i,600,600i,700,700i" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-        
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-        <title>CH Connect- Messenger</title>
+        <title>Messenger</title>
         
         {% tailwind_css %}
         <link rel="stylesheet" href="{%static 'css/dist/custom-style.css' %}">
     </head>
     <body class="bg-[#F3F5F7]">
+
         <style>
             .contacts .active{
                 background-color: lightgray;
@@ -36,22 +35,22 @@
         <div class="none:container relative">
 
             <div class="sidebar fixed top-24 left-0  flex flex-col justify-between items-center m-4 w-[84px] h-[480px] bg-white rounded-2xl shadow-2xl shadow-gray-400">
-                <a href="/" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mt-2 rounded-lg"><img src="{%static 'img/home.svg' %}" alt="">
-                    <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Home</p>
+                <a href="{% url 'home'%}" class="group relative  bg-gray-400 hover:bg-[#63cc89] p-3 mt-2 rounded-lg shadow-lg "><img class="h-10 w-10" src="{%static 'img/home.svg' %}" alt="">
+                  <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Home</p>
                 </a>
-                <a href="#" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mt-2 rounded-lg"><img src="{%static 'img/profile.svg' %}" alt="">
-                    <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Profile</p>
+                <a href="{% url 'profiles:myProfile' %}" class="group relative  bg-gray-400 hover:bg-[#63cc89] p-3 mt-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/profile.svg' %}" alt="">
+                  <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Profile</p>
                 </a>
-                <a href="/messenger" class="group relative bg-[#a7e0bc] hover:bg-[#63cc89] p-3 mt-2 rounded-lg shadow-lg"><img src="{%static 'img/chat.svg' %}" alt="">
-                    <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Messages</p>
-                </a> 
-                <a href="#" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mt-2 rounded-lg"><img src="{%static 'img/friends.svg' %}" alt="">
-                    <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Find Freinds</p>
+                <a href="{% url 'chat:index' %}" class="group relative bg-[#a7e0bc] hover:bg-[#63cc89] p-3 mt-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/chat.svg' %}" alt="">
+                  <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Messages</p>
                 </a>
-                <a href="#" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mb-2 rounded-lg"><img src="{%static 'img/settings.svg' %}" alt="">
-                    <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Settings</p>
+                <a href="{% url 'profiles:profile-list-view' %}" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mt-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/friends.svg' %}" alt="">
+                  <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Find Freinds</p>
                 </a>
-
+                <a href="{% url 'profiles:my-invites-view' %}" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mb-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/add-friend.png' %}" alt="">
+                  <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Friend Request</p>
+                </a>
+      
             </div>  
 
             <div class="main">
@@ -84,9 +83,15 @@
                         </button>
                     
                         <div class="relative">
-                            <img class="w-10 h-10 rounded-full" src="{% static 'img/me.jpg' %}" alt="">
+                            <img class="w-10 h-10 rounded-full" src="{{request.user.profile.avatar.url}}" alt="">
                             <span class="top-0 left-7 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-[#a3b5c8] dark:border-gray-800 rounded-full"></span>
-                            <span class=" bg-[#e2e6ea] flex justify-center items-center bottom-[-5px] right-[-2px] absolute material-icons-sharp w-3.5 h-3.5 border-red-900 dark:border-gray-800 rounded-full">expand_more</span>
+                            <div class="expand-more ">
+                              <span class=" bg-[#e2e6ea] flex justify-center items-center bottom-[-5px] right-[-2px] absolute material-icons-sharp w-3.5 h-3.5 border-red-900 dark:border-gray-800 rounded-full">expand_more</span>
+                              <ul class="expand-more-items">
+                                  <li><a href="#">settings</a></li>
+                                  <li><a href="{%url 'logout' %}">logout</a></li>
+                              </ul>
+                          </div>
                         </div>
                     </div>
                 </div>
@@ -130,8 +135,11 @@
 
                                     <div chat-id="chat_{{thread.id}}" class="contact-list {% if forloop.first %}active{% endif %}  px-3 flex items-center hover:bg-grey-lighter cursor-pointer">
                                         <div>
-                                            <img class="h-10 w-10 rounded-full"
-                                                src=" {{thread.second_person.profile.avatar.url}}"/>
+                                            {% if thread.first_person == user %}
+                                                <img class="h-10 w-10 rounded-full" src=" {{thread.second_person.profile.avatar.url}}"/>
+                                            {% else %}
+                                                <img class="h-10 w-10 rounded-full" src=" {{thread.first_person.profile.avatar.url}}"/>
+                                            {% endif %}
                                         </div>
                                         <div class="ml-4 flex-1 border-b border-grey-lighter py-4">
                                             <div class="flex items-bottom justify-between">
@@ -139,7 +147,7 @@
                                                     {% if thread.first_person == user %}
                                                         {{thread.second_person.profile.first_name}} {{thread.second_person.profile.last_name}}
                                                     {% else %}
-                                                        {{thread.second_person.profile.first_name}} {{thread.second_person.profile.last_name}}
+                                                        {{thread.first_person.profile.first_name}} {{thread.first_person.profile.last_name}}
                                                     {% endif %}
                                                 </p>
                                                 <p class="cursor-pointer  text-xs text-grey-darkest">
@@ -150,7 +158,7 @@
                                                 Click to start the conversation
                                             </p>
                                         </div>
-                                    </div>
+                                   </div>
                                     {% endfor %}
 
 
@@ -180,7 +188,7 @@
 
                                 <!-- Messages -->
                                 <div class="flex-1 overflow-auto" style="background-color: #DAD3CC">
-                                    {% for thread in Threads %}
+                            {% for thread in Threads %}
 
                                     <div class="py-2 px-3 messages-wrapper {% if forloop.first %}hidden is_active{% else %}hidden{% endif %}  flex flex-col"
                                         chat-id="chat_{{ thread.id }}" other-user-id="
@@ -242,22 +250,12 @@
                                                     </div>
                                                 </div>
                                                 {% endif %}
-                                                <!--receiver-->
-                                                <div class="flex justify-end mb-2">
-                                                    <div class="rounded py-2 px-3" style="background-color: #E2F7CB">
-                                                        <p class="text-sm mt-1">
-                                                            Hi guys.
-                                                        </p>
-                                                        <p class="text-right text-xs text-grey-dark mt-1">
-                                                            12:45 pm
-                                                        </p>
-                                                    </div>
-                                                </div>
+                                              
                                             {% endfor %}
                                         {% comment %} <div> {% endcomment %}
 
                                         
-                                    </div><!--end of Div 1 Messages -->
+                                    </div><!--end of Div 1 messages-wrapper -->
                                 {% endfor %}
                                 </div><!--end of  Messages -->
 
@@ -291,22 +289,16 @@
 
 
     
-    <!-- Link to js -->
-    {% comment %} <script src="js/main.js"></script> {% endcomment %}
     </body>
+    <!-- Link to js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
-     
-
-
-
-
-
-
-
 
         let img = "{% static 'img/me.jpg' %}"
     </script>
-    <script src="{%static 'js/message.js' %}"></script>
+    <script src="{% static 'js/message.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+
 </html>

@@ -33,7 +33,7 @@
           <a href="{% url 'profiles:myProfile' %}" class="group relative bg-[#a7e0bc] hover:bg-[#63cc89] p-3 mt-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/profile.svg' %}" alt="">
             <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Profile</p>
           </a>
-          <a href="/messenger" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mt-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/chat.svg' %}" alt="">
+          <a href="{% url 'chat:index' %}" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mt-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/chat.svg' %}" alt="">
             <p class="hidden group-hover:block absolute bottom-0 right-[-3rem] bg-[#a7e0bc] p-1 rounded-lg">Messages</p>
           </a>
           <a href="{% url 'profiles:profile-list-view' %}" class="group relative bg-gray-400 hover:bg-[#63cc89] p-3 mt-2 rounded-lg"><img class="h-10 w-10" src="{%static 'img/friends.svg' %}" alt="">
@@ -344,7 +344,7 @@
             </div>
       
 
-            <!-- ------Active status------- -->
+            {% comment %} <!-- ------Active status------- -->
             <div class="z-0  active-statuss fixed top-40 right-0 w-[292px] m-4 rounded-2xl shadow-lg shadow-gray-400 bg-blue-500">
                 <div class="bg-white shadow rounded-lg p-4">
                 <div class="flex items-center mb-4">
@@ -361,7 +361,7 @@
                     <img src="{% static 'img/me.jpg' %}" alt="User 7" class="w-8 h-8 rounded-full">
                     <img src="{% static 'img/me.jpg' %}" alt="User 8" class="w-8 h-8 rounded-full">
                 </div>
-            </div>
+            </div> {% endcomment %}
 
         </div>
     </div>

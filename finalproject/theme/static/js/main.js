@@ -95,10 +95,12 @@ $(document).ready(function() {
               
             </div>
             <div class="flex items-center mt-4">
+            <a href="handlelike/${item.id}">
               <button class="flex items-center text-gray-500 hover:text-blue-500">
                 <span class="material-symbols-outlined text-red-500">favorite</span>
-                Like
+                ${item.num_likes == 0 ? `<span>0</span>`:`<span>${item.num_likes}</span>`}
               </button>
+            </a>
               <button id="comment" class="flex items-center text-gray-500 hover:text-blue-500 ml-8">
                 <span class="material-symbols-outlined text-green-500">comment</span>
                 Comment
@@ -344,6 +346,51 @@ $(document).ready(function(){
 
 
 
+// ------------for ajax search =====---------------------=-------
+const searchField = document.querySelector('#searchField');
+const searchResult = document.querySelector('.search-result');
+const noResult = document.querySelector('.noResult');
+searchResult.style.display = 'None';
+
+searchField.addEventListener("keyup", (e) => {
+  const searchValue = e.target.value;
+
+  if(searchValue.trim().length > 0){
+    // console.log("searchvalue", searchValue );
+    fetch("/search", {
+      body: JSON.stringify({searchText: searchValue}),
+      method: "POST",
+    })
+    .then((res) => res.json())
+    .then((data) =>{
+      console.log("data", data)
+
+      searchResult.style.display = 'block';
+      searchResult.innerHTML = "";
+
+      if(data.length === 0 ){
+        noResult.style.display = 'block';
+      }
+      
+      else{
+        noResult.style.display = 'None';
+        data.forEach(item => {
+          searchResult.innerHTML += `
+            <a href="${profileURL.replace('0',item.id)}" class="p-5 border-b-2 mb-2 flex flex-row justify-between item-center cursor pointer">
+              <img src="img/${item.avatar}" alt="User 1" class="w-16 h-16 rounded-md shadow-lg shadow-slate-500/50">
+              <span class="text-xl ml-10">${item.first_name} ${item.last_name}</span>
+            </a>
+          `
+        });
+      }
+
+    })
 
 
-
+  }
+  else{
+    searchResult.style.display = 'none';
+    searchResult.innerHTML = "";
+    
+}
+})

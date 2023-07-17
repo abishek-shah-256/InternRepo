@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-hh!=j!hrwugqo_9#t^l62y3m(sd7m9oytqkz-ttkk48fo^ekeu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','*']
+ALLOWED_HOSTS = ['localhost','192.168.10.136:8000','*']
 
 
 # Application definition
@@ -94,6 +94,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     "django_browser_reload.middleware.BrowserReloadMiddleware",
+    'app1.utils.UpdateLastActivityMiddleware',
 ]
 
 ROOT_URLCONF = 'finalproject.urls'
@@ -216,6 +217,7 @@ CHANNEL_LAYERS = {
 }
 
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 
 

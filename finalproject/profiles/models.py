@@ -20,6 +20,7 @@ class Profile(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    last_online = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
         # return f"{self.user.email} -- {self.created}.strftime('%d-%m-%Y')"

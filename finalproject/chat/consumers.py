@@ -6,6 +6,7 @@ from channels.consumer import AsyncConsumer
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from chat.models import Thread, ChatMessage
+from datetime import datetime
 
 class ChatConsumer(AsyncConsumer):
 
@@ -49,14 +50,17 @@ class ChatConsumer(AsyncConsumer):
             print("Error: Thread id is incorrect or Not Exists")
 
         await self.create_chat_message(thread_obj, sent_by_user, msg)
-
+    
         other_user_chat_room = f"user_chatroom_{send_to_id}"
         self_user = self.scope['user']
 
+        now = datetime.now()
+        time = now.strftime("%d %a, %H:%M")
         response = {
             'message': msg,
             'sent_by': self_user.id,
             'thread_id': thread_id,
+            'time': time,
         }
 
         await self.channel_layer.group_send(

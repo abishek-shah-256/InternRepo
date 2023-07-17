@@ -27,7 +27,7 @@ socket.onopen = async function(e){
         //     send_to = 5
         // else
         //     send_to = 2
-            
+        debugger;
         let data = {
             'message': message,
             'sent_by': user_id,
@@ -51,8 +51,9 @@ socket.onmessage = async function(e){
     let message = data['message']
     let sent_by_id = data['sent_by']
     let thread_id = data['thread_id']
+    let time = data['time']
     console.log('aetaaaaaa', message)
-    newMessage(message, sent_by_id, thread_id)
+    newMessage(message, sent_by_id, thread_id, time)
 };
 
 socket.onerror = async function(e){
@@ -68,7 +69,7 @@ socket.onclose = async function(e){
 
 // debugger;
 let countt = 0;
-function newMessage(message, sent_by_id, thread_id){
+function newMessage(message, sent_by_id, thread_id, time){
     if($.trim(message) === ''){
         return false;
     }
@@ -86,7 +87,7 @@ function newMessage(message, sent_by_id, thread_id){
         ${message}
         </p>
         <p class="text-right text-xs text-grey-dark mt-1">
-        12:45 pm
+        ${time}
         </p>
         </div>
         </div>
@@ -97,13 +98,13 @@ function newMessage(message, sent_by_id, thread_id){
         <div class="flex mb-2">
             <div class="rounded py-2 px-3" style="background-color: #F2F2F2">
             <p class="text-sm text-purple">
-            Other user--
+           
             </p>
             <p class="text-sm mt-1">
             ${message}
             </p>
             <p class="text-right text-xs text-grey-dark mt-1">
-            2:45 pm
+            ${time}
             </p>
             </div>
         </div>

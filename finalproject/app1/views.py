@@ -4,7 +4,7 @@ from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.decorators import login_required
 from .forms import CreateUserForm
 from django.contrib.auth.forms import AuthenticationForm
-from app1.models import CustomUser, Post, Comment
+from app1.models import CustomUser, Post, Comment, Likes
 from profiles.models import Profile
 from django.contrib import messages
 from django.http import JsonResponse
@@ -18,6 +18,13 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from django.conf import settings
 import requests
+from django.utils import timezone
+
+
+
+
+
+
 
 # -----for email verification of registered user------------------
 def generate_token(length=64):
@@ -97,6 +104,30 @@ def authenticatee(request,token=None):
 
 @login_required(login_url='signin')
 def home(request):
+
+    # ----for active users-------------
+    active_threshold = timezone.now() - timezone.timedelta(seconds=20)
+    print('time ho  ',active_threshold)
+    # active_users = Profile.objects.filter(last_online__gte=active_threshold)
+
+    profile_me = Profile.objects.get(pk=request.user.pk)
+    profile_friends = [user for user in profile_me.get_friends()]
+
+    active_friends = Profile.objects.filter(user__in=profile_friends, last_online__gte=active_threshold)
+
+    # apple=[]
+    # for f in profile_friends:
+    #     cust = Profile.objects.filter(user = f)
+    #     if cust in active_users:
+    #         apple.append(f)
+
+    # print("active users",active_users)
+    # print("Profile friends: ",profile_friends)
+    # print("active friends:",active_friends)
+    # # ----end for active users-------------
+
+
+
     profile = Profile.objects.get(user=request.user)
     
     if request.method == 'POST':
@@ -143,6 +174,7 @@ def home(request):
             'user_email': p.author.email,
             'post_img':p.post_img.url if p.post_img else None,
             'created_at':p.created_at.strftime('%d %B, %Y' ', %H:%M'),
+            'num_likes':p.num_likes,
             # 'comment':[comment.comment_content for comment in comments],
             # 'commented_user_img':[comment.commented_user.avatar.url for comment in comments],
             # 'user_comment': {
@@ -161,7 +193,8 @@ def home(request):
     context = {
         'posts' :post_data,
         'profile': profile,
-        'post_comment_list':post_comment_list
+        'post_comment_list':post_comment_list,
+        'active_users': active_friends,
     }
     return render(request, 'app1/home.html',context)
 
@@ -280,6 +313,7 @@ def getupdatedPost(request):
             # 'comments': zip([comment.comment_content for comment in comments], [comment.commented_user.avatar.url for comment in comments]),
             'commented_user':  [comment.commented_user.avatar.url for comment in comments],
             'loggedin_user_Profile': profile.avatar.url,
+            'num_likes':p.num_likes,
         }
 
 
@@ -334,14 +368,40 @@ def handleComment(request):
 
 
 @login_required(login_url='signin')
-def userprofile(request):
-    return render(request, 'app1/userprofile.html')
-
-@login_required(login_url='signin')
 def userpost(request):
     pass
 
-@login_required(login_url='signin')
-def messenger(request):
-    return render(request, 'app1/messenger.html')
 
+@login_required(login_url='signin')
+def handleLike(request, pid):
+    post_id = pid
+    pos = Post.objects.get(id = post_id)
+    profile_me = Profile.objects.filter(user=request.user).first()
+    like_present = Likes.objects.filter(post_id=pos, user_like=profile_me).first()
+
+    if like_present == None:     
+        new_like = Likes.objects.create(post_id=pos, user_like=profile_me)
+        new_like.save()
+        pos.num_likes = pos.num_likes + 1
+        pos.save() 
+    else:
+        like_present.delete()
+        pos.num_likes = pos.num_likes - 1
+        pos.save()
+    
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
+
+@login_required(login_url='signin')
+def search(request):
+    if request.method == 'POST':
+        search_str = json.loads(request.body).get('searchText')
+        prof = Profile.objects.filter(
+            first_name__icontains = search_str).distinct() | Profile.objects.filter(
+            last_name__icontains = search_str).distinct() | Profile.objects.filter(
+            email__icontains = search_str
+            ).distinct()
+        data = prof.values()
+
+    return JsonResponse(list(data), safe = False)
